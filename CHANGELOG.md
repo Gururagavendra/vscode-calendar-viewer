@@ -2,6 +2,14 @@
 
 All notable changes to the "Outlook Calendar Viewer" extension will be documented in this file.
 
+## [1.0.2] - 2025-11-26
+
+### Improved
+- Simplified and polished extension description and README
+- Better error handling for port conflicts
+- Smart port retry mechanism (waits 2s for zombie processes to clear)
+- Cleaner user-facing error messages
+
 ## [1.0.1] - 2025-11-26
 
 ### Fixed

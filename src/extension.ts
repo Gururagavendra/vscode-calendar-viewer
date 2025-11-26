@@ -75,7 +75,11 @@ function registerCommands(context: vscode.ExtensionContext) {
         } catch (error: any) {
             outputChannel.appendLine(`❌ Error caught: ${error.message}`);
             outputChannel.appendLine(`Stack: ${error.stack}`);
-            vscode.window.showErrorMessage(`Authentication failed: ${error.message}`);
+            
+            // Don't show error message if it's already been handled (like EADDRINUSE)
+            if (error.code !== 'EADDRINUSE') {
+                vscode.window.showErrorMessage(`Authentication failed: ${error.message}`);
+            }
         }
     });
 

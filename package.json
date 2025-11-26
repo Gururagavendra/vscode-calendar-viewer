@@ -1,8 +1,8 @@
 {
   "name": "outlook-calendar-viewer",
   "displayName": "Outlook Calendar Viewer",
-  "description": "View and sync your Outlook calendar events directly in VS Code with OAuth authentication",
-  "version": "1.0.1",
+  "description": "View your Microsoft Outlook calendar events directly in VS Code. Simple, secure, and seamless.",
+  "version": "1.0.2",
   "publisher": "Gururagavendra",
   "author": {
     "name": "Gururagavendra"

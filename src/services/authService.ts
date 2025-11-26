@@ -5,6 +5,7 @@
 import * as vscode from 'vscode';
 import * as http from 'http';
 import * as url from 'url';
+import * as net from 'net';
 import { TokenCache, AzureConfig } from '../models/types';
 
 export class AuthService {
@@ -82,7 +83,22 @@ export class AuthService {
     /**
      * Private: Handle browser-based OAuth flow
      */
-    private authenticateWithBrowser(): Promise<string> {
+    private async authenticateWithBrowser(): Promise<string> {
+        const port = 3000;
+        
+        // Check if port is available, if not try to free it
+        const isAvailable = await this.checkPortAvailable(port);
+        if (!isAvailable) {
+            this.outputChannel.appendLine(`⚠️ Port ${port} is in use, attempting to free it...`);
+            const freed = await this.tryFreePort(port);
+            
+            if (!freed) {
+                const message = `Port ${port} is in use by another application. Please close it or wait a moment and try again.`;
+                this.outputChannel.appendLine(`❌ ${message}`);
+                throw new Error(message);
+            }
+        }
+        
         return new Promise((resolve, reject) => {
             this.outputChannel.appendLine('Creating HTTP server...');
             
@@ -129,14 +145,16 @@ export class AuthService {
                 }
             });
             
-            server.on('error', (err) => {
+            server.on('error', (err: NodeJS.ErrnoException) => {
                 this.outputChannel.appendLine(`❌ Server error: ${err.message}`);
+                vscode.window.showErrorMessage(`Authentication server error: ${err.message}`);
+                server.close();
                 reject(err);
             });
             
-            server.listen(3000, () => {
+            server.listen(port, () => {
                 this.outputChannel.appendLine('\n=== Starting OAuth Flow ===');
-                this.outputChannel.appendLine('Local server started on http://localhost:3000');
+                this.outputChannel.appendLine(`Local server started on http://localhost:${port}`);
                 
                 const authUrl = `https://login.microsoftonline.com/${this.config.tenant}/oauth2/v2.0/authorize?` +
                     `client_id=${this.config.clientId}` +
@@ -151,9 +169,42 @@ export class AuthService {
             
             // Timeout after 5 minutes
             setTimeout(() => {
-                server.close();
-                reject(new Error('Authentication timeout'));
+                if (server.listening) {
+                    server.close();
+                    this.outputChannel.appendLine('⏱️ Authentication timeout - no response after 5 minutes');
+                    vscode.window.showWarningMessage('Authentication timed out. Please try again.');
+                    reject(new Error('Authentication timeout'));
+                }
             }, 5 * 60 * 1000);
+        });
+    }
+
+    /**
+     * Try to free up a port (wait and retry)
+     */
+    private async tryFreePort(port: number): Promise<boolean> {
+        // Wait 2 seconds for any previous server to fully close
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        return await this.checkPortAvailable(port);
+    }
+
+    /**
+     * Check if a port is available
+     */
+    private checkPortAvailable(port: number): Promise<boolean> {
+        return new Promise((resolve) => {
+            const server = net.createServer();
+            
+            server.once('error', () => {
+                resolve(false);
+            });
+            
+            server.once('listening', () => {
+                server.close();
+                resolve(true);
+            });
+            
+            server.listen(port, '127.0.0.1');
         });
     }
 }

@@ -1,0 +1,33 @@
+# VS Code Extension - Node.js
+node_modules/
+out/
+dist/
+*.vsix
+
+# Build files
+*.js.map
+.vscode-test/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Sensitive data (tokens, secrets)
+.secrets/
+tokens.json
+*.pem
+*.key

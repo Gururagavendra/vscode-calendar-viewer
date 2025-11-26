@@ -14,14 +14,66 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "outlook-calendar",
+          "title": "Outlook Calendar",
+          "icon": "$(calendar)"
+        }
+      ]
+    },
+    "views": {
+      "outlook-calendar": [
+        {
+          "id": "outlookCalendar",
+          "name": "Upcoming Events",
+          "when": "outlookCalendar.authenticated"
+        },
+        {
+          "id": "outlookCalendarWelcome",
+          "name": "Welcome",
+          "when": "!outlookCalendar.authenticated"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "outlook-calendar.authenticate",
-        "title": "Authenticate with Microsoft"
+        "title": "Sign In",
+        "category": "Outlook Calendar",
+        "icon": "$(sign-in)"
       },
       {
         "command": "outlook-calendar.fetchEvents",
-        "title": "Fetch Calendar Events"
+        "title": "Fetch Calendar Events",
+        "category": "Outlook Calendar"
+      },
+      {
+        "command": "outlook-calendar.refresh",
+        "title": "Refresh",
+        "category": "Outlook Calendar",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "outlook-calendar.authenticate",
+          "when": "view == outlookCalendar",
+          "group": "navigation@1"
+        },
+        {
+          "command": "outlook-calendar.refresh",
+          "when": "view == outlookCalendar",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "outlookCalendarWelcome",
+        "contents": "Sign in to view your Outlook calendar events.\n[$(sign-in) Sign In with Microsoft](command:outlook-calendar.authenticate)\nAfter signing in, your upcoming events will appear here."
       }
     ]
   },

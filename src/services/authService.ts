@@ -84,6 +84,8 @@ export class AuthService {
      */
     private authenticateWithBrowser(): Promise<string> {
         return new Promise((resolve, reject) => {
+            this.outputChannel.appendLine('Creating HTTP server...');
+            
             const server = http.createServer(async (req, res) => {
                 this.outputChannel.appendLine(`\n=== Received Request ===`);
                 this.outputChannel.appendLine(`URL: ${req.url}`);
@@ -125,6 +127,11 @@ export class AuthService {
                     server.close();
                     resolve(token);
                 }
+            });
+            
+            server.on('error', (err) => {
+                this.outputChannel.appendLine(`❌ Server error: ${err.message}`);
+                reject(err);
             });
             
             server.listen(3000, () => {

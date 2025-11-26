@@ -17,8 +17,14 @@ let calendarTreeProvider: CalendarTreeProvider;
  * Extension activation
  */
 export function activate(context: vscode.ExtensionContext) {
+    console.log('=== OUTLOOK CALENDAR EXTENSION ACTIVATING ===');
+    
     outputChannel = vscode.window.createOutputChannel('Outlook Calendar');
     outputChannel.appendLine('Outlook Calendar Viewer activated');
+    outputChannel.appendLine(`Extension path: ${context.extensionPath}`);
+    outputChannel.show();
+    
+    console.log('Output channel created');
     
     // Initialize services
     authService = new AuthService(outputChannel);
@@ -47,9 +53,13 @@ function registerCommands(context: vscode.ExtensionContext) {
     // Command: Authenticate
     const authCommand = vscode.commands.registerCommand('outlook-calendar.authenticate', async () => {
         outputChannel.show();
+        outputChannel.appendLine('\n=== Authentication Command Triggered ===');
         
         try {
+            outputChannel.appendLine('Calling authService.authenticate()...');
             const success = await authService.authenticate();
+            
+            outputChannel.appendLine(`Authentication result: ${success}`);
             
             if (success) {
                 // Update context for view visibility
@@ -59,8 +69,12 @@ function registerCommands(context: vscode.ExtensionContext) {
                 
                 // Auto-fetch events after authentication
                 await fetchAndDisplayEvents();
+            } else {
+                vscode.window.showErrorMessage('Authentication failed - no token received');
             }
         } catch (error: any) {
+            outputChannel.appendLine(`❌ Error caught: ${error.message}`);
+            outputChannel.appendLine(`Stack: ${error.stack}`);
             vscode.window.showErrorMessage(`Authentication failed: ${error.message}`);
         }
     });

@@ -1,61 +1,87 @@
-# Outlook Calendar Viewer - Minimal PoC
+# Outlook Calendar Viewer for VS Code
 
-Minimal VS Code extension to test Microsoft Graph API connectivity and polling for Outlook calendar events.
+View and sync your Outlook calendar events directly in Visual Studio Code with OAuth 2.0 authentication.
 
-## Goal
+## Features
 
-Validate that we can:
-1. Authenticate with Microsoft Graph API
-2. Fetch calendar events
-3. Poll for updates
+- 🔐 **Secure OAuth 2.0 Authentication** - Sign in with your Microsoft account
+- 📅 **Real-time Calendar Sync** - View upcoming events for the next 7 days
+- 🎨 **Beautiful Sidebar UI** - Events organized by date in a clean tree view
+- 🔄 **Easy Refresh** - One-click refresh to get latest events
+- 🌐 **Click to Open** - Open events in your browser with one click
+- 💼 **Works with Both** - Personal Microsoft accounts and work/school accounts
 
-## Setup
+## Installation
 
-### 1. Register Azure AD App
-
-1. Go to [Azure Portal](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade)
-2. Click "New registration"
-3. Name: `VS Code Calendar Viewer`
-4. Supported account types: "Accounts in any organizational directory and personal Microsoft accounts"
-5. Redirect URI: Leave blank for now (we'll use device code flow)
-6. Click "Register"
-7. Copy the **Application (client) ID**
-
-### 2. Configure App Permissions
-
-1. Go to "API permissions"
-2. Click "Add a permission" → "Microsoft Graph" → "Delegated permissions"
-3. Add: `Calendars.Read` and `User.Read`
-4. Click "Add permissions"
-
-### 3. Update Extension Code
-
-Open `src/extension.ts` and replace `YOUR_CLIENT_ID` with your actual client ID:
-
-```typescript
-const CLIENT_ID = 'your-client-id-here';
-```
-
-### 4. Compile and Run
-
-```bash
-npm run compile
-# Press F5 to launch extension in debug mode
-```
+1. Install from VS Code Marketplace
+2. Click the calendar icon in the Activity Bar
+3. Click "Sign In with Microsoft"
+4. Authorize the extension
+5. View your calendar events!
 
 ## Usage
 
-1. Open Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`)
-2. Run: `Authenticate with Microsoft`
-3. Follow the device code instructions (visit the URL and enter the code)
-4. After auth, run: `Fetch Calendar Events`
-5. Check "Output" panel → "Outlook Calendar" to see events
+### Sign In
+1. Click the calendar (📅) icon in the Activity Bar
+2. Click "Sign In with Microsoft" button
+3. Complete authentication in browser
+4. Return to VS Code to see your events
 
-## What's Next
+### Refresh Events
+Click the refresh button (🔄) in the sidebar toolbar to fetch latest events.
 
-Once this works:
-- Add sidebar tree view
-- Improve error handling
-- Add token caching
-- Enable automatic polling
-- Add status bar countdown
+### Open Event
+Click any event to open it in your default browser.
+
+## Requirements
+
+- VS Code 1.80.0 or higher
+- Microsoft account (personal or work/school)
+- Internet connection for authentication and syncing
+
+## Extension Settings
+
+This extension contributes the following settings:
+
+* Calendar events are fetched for the next 7 days
+* Auto-refresh available via the refresh button
+* OAuth tokens are securely stored by VS Code
+
+## Known Issues
+
+- Token expires after 1 hour (re-authentication required)
+- Maximum 50 events displayed at once
+
+## Privacy
+
+This extension:
+- Only requests calendar read permissions
+- Does not store your credentials
+- Uses OAuth 2.0 for secure authentication
+- Does not share your data with third parties
+
+## Release Notes
+
+### 1.0.0
+
+Initial release:
+- OAuth 2.0 authentication
+- Calendar event viewing
+- Sidebar tree view
+- Event grouping by date
+
+## Contributing
+
+Contributions welcome! Please open an issue or submit a PR on [GitHub](https://github.com/Gururagavendra/vscode-calendar-viewer).
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details
+
+## Support
+
+For issues and feature requests, please visit the [GitHub repository](https://github.com/Gururagavendra/vscode-calendar-viewer/issues).
+
+---
+
+**Enjoy!** 🎉

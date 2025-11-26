@@ -1,8 +1,31 @@
 {
   "name": "outlook-calendar-viewer",
   "displayName": "Outlook Calendar Viewer",
-  "description": "View your Outlook calendar events in VS Code",
-  "version": "0.0.1",
+  "description": "View and sync your Outlook calendar events directly in VS Code with OAuth authentication",
+  "version": "1.0.1",
+  "publisher": "Gururagavendra",
+  "author": {
+    "name": "Gururagavendra"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gururagavendra/vscode-calendar-viewer"
+  },
+  "bugs": {
+    "url": "https://github.com/Gururagavendra/vscode-calendar-viewer/issues"
+  },
+  "homepage": "https://github.com/Gururagavendra/vscode-calendar-viewer#readme",
+  "keywords": [
+    "outlook",
+    "calendar",
+    "microsoft",
+    "graph",
+    "oauth",
+    "events",
+    "schedule"
+  ],
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -10,7 +33,10 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onView:outlookCalendar",
+    "onView:outlookCalendarWelcome",
+    "onCommand:outlook-calendar.authenticate"
   ],
   "main": "./out/extension.js",
   "contributes": {

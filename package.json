@@ -1,8 +1,8 @@
 {
   "name": "outlook-calendar-viewer",
-  "displayName": "Outlook Calendar Viewer",
-  "description": "View your Microsoft Outlook calendar events directly in VS Code. Simple, secure, and seamless.",
-  "version": "1.0.2",
+  "displayName": "Outlook Calendar & Email Viewer",
+  "description": "View your Microsoft Outlook calendar events and emails directly in VS Code. Simple, secure, and seamless.",
+  "version": "1.1.0",
   "publisher": "Gururagavendra",
   "author": {
     "name": "Gururagavendra"
@@ -33,10 +33,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished",
-    "onView:outlookCalendar",
-    "onView:outlookCalendarWelcome",
-    "onCommand:outlook-calendar.authenticate"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -52,14 +49,19 @@
     "views": {
       "outlook-calendar": [
         {
+          "id": "outlookWelcome",
+          "name": "Welcome",
+          "when": "!outlookCalendar.authenticated"
+        },
+        {
           "id": "outlookCalendar",
           "name": "Upcoming Events",
           "when": "outlookCalendar.authenticated"
         },
         {
-          "id": "outlookCalendarWelcome",
-          "name": "Welcome",
-          "when": "!outlookCalendar.authenticated"
+          "id": "outlookEmail",
+          "name": "Inbox",
+          "when": "outlookCalendar.authenticated"
         }
       ]
     },
@@ -80,6 +82,29 @@
         "title": "Refresh",
         "category": "Outlook Calendar",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "outlook-email.fetchEmails",
+        "title": "Fetch Emails",
+        "category": "Outlook Email"
+      },
+      {
+        "command": "outlook-email.refresh",
+        "title": "Refresh",
+        "category": "Outlook Email",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "outlook-email.fetchUnread",
+        "title": "Show Unread Only",
+        "category": "Outlook Email",
+        "icon": "$(mail)"
+      },
+      {
+        "command": "outlook-email.openEmail",
+        "title": "Open in Outlook Web",
+        "category": "Outlook Email",
+        "icon": "$(link-external)"
       }
     ],
     "menus": {
@@ -93,13 +118,30 @@
           "command": "outlook-calendar.refresh",
           "when": "view == outlookCalendar",
           "group": "navigation@2"
+        },
+        {
+          "command": "outlook-email.refresh",
+          "when": "view == outlookEmail",
+          "group": "navigation@1"
+        },
+        {
+          "command": "outlook-email.fetchUnread",
+          "when": "view == outlookEmail",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "outlook-email.openEmail",
+          "when": "view == outlookEmail && viewItem =~ /Email/",
+          "group": "inline"
         }
       ]
     },
     "viewsWelcome": [
       {
-        "view": "outlookCalendarWelcome",
-        "contents": "Sign in to view your Outlook calendar events.\n[$(sign-in) Sign In with Microsoft](command:outlook-calendar.authenticate)\nAfter signing in, your upcoming events will appear here."
+        "view": "outlookWelcome",
+        "contents": "Sign in to view your Outlook calendar and emails.\n[$(sign-in) Sign In with Microsoft](command:outlook-calendar.authenticate)\nAfter signing in, your calendar events and inbox will appear below."
       }
     ]
   },

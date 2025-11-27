@@ -10,6 +10,23 @@ export interface CalendarEvent {
     webLink: string;
 }
 
+export interface EmailMessage {
+    id: string;
+    subject: string;
+    from: {
+        emailAddress: {
+            name: string;
+            address: string;
+        };
+    };
+    receivedDateTime: string;
+    bodyPreview: string;
+    isRead: boolean;
+    hasAttachments: boolean;
+    webLink: string;
+    importance: string;
+}
+
 export interface TokenCache {
     accessToken: string;
     expiresOn: Date;

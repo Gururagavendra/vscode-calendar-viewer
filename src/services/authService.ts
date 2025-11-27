@@ -19,7 +19,7 @@ export class AuthService {
             clientId: '7e3b9562-8bdd-4172-ab19-2b28a485bfba',
             tenant: 'common',
             redirectUri: 'http://localhost:3000',
-            scopes: 'https://graph.microsoft.com/Calendars.Read https://graph.microsoft.com/User.Read offline_access'
+            scopes: 'https://graph.microsoft.com/Calendars.Read https://graph.microsoft.com/Mail.Read https://graph.microsoft.com/User.Read offline_access'
         };
     }
 
@@ -110,22 +110,94 @@ export class AuthService {
                 if (req.url === '/' || req.url?.startsWith('/?')) {
                     res.writeHead(200, { 'Content-Type': 'text/html' });
                     res.end(`
+                        <!DOCTYPE html>
                         <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Authentication</title>
+                            <style>
+                                * {
+                                    margin: 0;
+                                    padding: 0;
+                                    box-sizing: border-box;
+                                }
+                                body {
+                                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                    background: #f3f2f1;
+                                    min-height: 100vh;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    padding: 20px;
+                                }
+                                .container {
+                                    background: white;
+                                    border: 1px solid #e1dfdd;
+                                    padding: 48px;
+                                    text-align: center;
+                                    max-width: 440px;
+                                    width: 100%;
+                                }
+                                .icon {
+                                    font-size: 48px;
+                                    margin-bottom: 24px;
+                                }
+                                h1 {
+                                    color: #323130;
+                                    font-size: 24px;
+                                    font-weight: 600;
+                                    margin-bottom: 8px;
+                                }
+                                p {
+                                    color: #605e5c;
+                                    font-size: 14px;
+                                    line-height: 20px;
+                                }
+                                .error-text {
+                                    color: #a4262c;
+                                    margin-top: 16px;
+                                    font-size: 13px;
+                                }
+                            </style>
+                        </head>
                         <body>
-                            <h1>Processing authentication...</h1>
+                            <div class="container">
+                                <div class="icon" id="icon">⏳</div>
+                                <h1 id="title">Signing you in</h1>
+                                <p id="message">Please wait...</p>
+                                <p class="error-text" id="errorDetails" style="display: none;"></p>
+                            </div>
                             <script>
                                 const hash = window.location.hash.substring(1);
                                 const params = new URLSearchParams(hash);
                                 const accessToken = params.get('access_token');
                                 const error = params.get('error');
+                                const errorDesc = params.get('error_description');
                                 
                                 if (accessToken) {
                                     fetch('/token?access_token=' + accessToken)
                                         .then(() => {
-                                            document.body.innerHTML = '<h1>✅ Authentication Successful!</h1><p>You can close this window and return to VS Code.</p>';
+                                            document.getElementById('icon').textContent = '✓';
+                                            document.getElementById('icon').style.color = '#107c10';
+                                            document.getElementById('title').textContent = 'Authentication successful';
+                                            document.getElementById('message').textContent = 'You can close this window and return to VS Code.';
+                                            setTimeout(() => window.close(), 2000);
+                                        })
+                                        .catch(() => {
+                                            showError('Failed to complete authentication.');
                                         });
                                 } else if (error) {
-                                    document.body.innerHTML = '<h1>❌ Authentication Failed</h1><p>' + params.get('error_description') + '</p>';
+                                    showError(errorDesc || 'Authentication failed.');
+                                }
+                                
+                                function showError(msg) {
+                                    document.getElementById('icon').textContent = '✕';
+                                    document.getElementById('icon').style.color = '#a4262c';
+                                    document.getElementById('title').textContent = 'Authentication failed';
+                                    document.getElementById('message').textContent = 'Something went wrong.';
+                                    document.getElementById('errorDetails').textContent = msg;
+                                    document.getElementById('errorDetails').style.display = 'block';
                                 }
                             </script>
                         </body>

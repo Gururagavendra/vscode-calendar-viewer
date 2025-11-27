@@ -2,7 +2,7 @@
   "name": "outlook-calendar-viewer",
   "displayName": "Outlook Calendar & Email Viewer",
   "description": "View your Microsoft Outlook calendar events and emails directly in VS Code. Simple, secure, and seamless.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "Gururagavendra",
   "author": {
     "name": "Gururagavendra"

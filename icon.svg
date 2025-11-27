@@ -1,36 +1,49 @@
 <svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="128" height="128" rx="20" fill="#0078D4"/>
+  <!-- Modern calendar icon with transparent background -->
   
-  <!-- Calendar body -->
-  <rect x="20" y="30" width="88" height="78" rx="6" fill="white"/>
+  <!-- Main calendar body -->
+  <rect x="16" y="28" width="96" height="88" rx="8" fill="#0078D4"/>
   
-  <!-- Calendar header -->
-  <rect x="20" y="30" width="88" height="20" rx="6" fill="#005A9E"/>
-  <rect x="20" y="40" width="88" height="10" fill="#005A9E"/>
+  <!-- Calendar top bar -->
+  <rect x="16" y="28" width="96" height="24" rx="8" fill="#005A9E"/>
+  <rect x="16" y="40" width="96" height="12" fill="#005A9E"/>
   
-  <!-- Calendar rings -->
-  <circle cx="35" cy="35" r="3" fill="white"/>
-  <circle cx="55" cy="35" r="3" fill="white"/>
-  <circle cx="75" cy="35" r="3" fill="white"/>
-  <circle cx="95" cy="35" r="3" fill="white"/>
+  <!-- Calendar binding rings (white) -->
+  <circle cx="32" cy="32" r="4" fill="white"/>
+  <circle cx="56" cy="32" r="4" fill="white"/>
+  <circle cx="72" cy="32" r="4" fill="white"/>
+  <circle cx="96" cy="32" r="4" fill="white"/>
   
-  <!-- Date grid lines -->
-  <line x1="20" y1="60" x2="108" y2="60" stroke="#E1E1E1" stroke-width="1"/>
-  <line x1="20" y1="75" x2="108" y2="75" stroke="#E1E1E1" stroke-width="1"/>
-  <line x1="20" y1="90" x2="108" y2="90" stroke="#E1E1E1" stroke-width="1"/>
+  <!-- White area for dates -->
+  <rect x="22" y="54" width="84" height="56" fill="white"/>
   
-  <line x1="40" y1="50" x2="40" y2="108" stroke="#E1E1E1" stroke-width="1"/>
-  <line x1="60" y1="50" x2="60" y2="108" stroke="#E1E1E1" stroke-width="1"/>
-  <line x1="80" y1="50" x2="80" y2="108" stroke="#E1E1E1" stroke-width="1"/>
+  <!-- Date grid -->
+  <line x1="22" y1="68" x2="106" y2="68" stroke="#E5E5E5" stroke-width="1.5"/>
+  <line x1="22" y1="82" x2="106" y2="82" stroke="#E5E5E5" stroke-width="1.5"/>
+  <line x1="22" y1="96" x2="106" y2="96" stroke="#E5E5E5" stroke-width="1.5"/>
   
-  <!-- Event dots -->
-  <circle cx="30" cy="67" r="2.5" fill="#0078D4"/>
-  <circle cx="50" cy="67" r="2.5" fill="#0078D4"/>
-  <circle cx="70" cy="82" r="2.5" fill="#0078D4"/>
-  <circle cx="90" cy="82" r="2.5" fill="#0078D4"/>
-  <circle cx="50" cy="97" r="2.5" fill="#0078D4"/>
+  <line x1="42" y1="54" x2="42" y2="110" stroke="#E5E5E5" stroke-width="1.5"/>
+  <line x1="62" y1="54" x2="62" y2="110" stroke="#E5E5E5" stroke-width="1.5"/>
+  <line x1="82" y1="54" x2="82" y2="110" stroke="#E5E5E5" stroke-width="1.5"/>
   
-  <!-- Highlight today -->
-  <rect x="62" y="77" width="16" height="13" rx="2" fill="#FFB900" opacity="0.3"/>
+  <!-- Today highlight (orange accent) -->
+  <rect x="64" y="70" width="16" height="10" rx="2" fill="#FFB900"/>
+  
+  <!-- Event indicators (blue dots) -->
+  <circle cx="32" cy="63" r="3" fill="#0078D4"/>
+  <circle cx="52" cy="63" r="3" fill="#0078D4"/>
+  <circle cx="72" cy="77" r="3" fill="#0078D4"/>
+  <circle cx="92" cy="77" r="3" fill="#0078D4"/>
+  <circle cx="32" cy="91" r="3" fill="#0078D4"/>
+  <circle cx="52" cy="91" r="3" fill="#0078D4"/>
+  
+  <!-- Email envelope overlay (bottom right corner) -->
+  <g transform="translate(72, 82)">
+    <!-- Envelope body -->
+    <rect x="0" y="0" width="36" height="28" rx="3" fill="white" stroke="#0078D4" stroke-width="2"/>
+    <!-- Envelope flap -->
+    <path d="M 0 0 L 18 14 L 36 0" fill="none" stroke="#0078D4" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Unread dot -->
+    <circle cx="32" cy="4" r="5" fill="#D13438"/>
+  </g>
 </svg>

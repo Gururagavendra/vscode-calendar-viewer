@@ -2,18 +2,15 @@
  * Email Service - Handles Microsoft Graph API calls for emails
  */
 
-import * as vscode from 'vscode';
 import axios from 'axios';
 import { EmailMessage } from '../models/types';
 import { AuthService } from './authService';
 
 export class EmailService {
-    private outputChannel: vscode.OutputChannel;
     private authService: AuthService;
     private readonly GRAPH_API_ENDPOINT = 'https://graph.microsoft.com/v1.0';
 
-    constructor(outputChannel: vscode.OutputChannel, authService: AuthService) {
-        this.outputChannel = outputChannel;
+    constructor(authService: AuthService) {
         this.authService = authService;
     }
 
@@ -22,8 +19,6 @@ export class EmailService {
      */
     async fetchRecentEmails(count: number = 50): Promise<EmailMessage[]> {
         try {
-            this.outputChannel.appendLine('Fetching emails...');
-            
             const token = this.authService.getAccessToken();
             if (!token) {
                 throw new Error('Not authenticated. Please sign in first.');
@@ -42,15 +37,9 @@ export class EmailService {
             });
 
             const emails: EmailMessage[] = response.data.value;
-            this.outputChannel.appendLine(`✅ Found ${emails.length} emails`);
-            
             return emails;
             
         } catch (error: any) {
-            this.outputChannel.appendLine(`❌ Error fetching emails: ${error.message}`);
-            if (error.response) {
-                this.outputChannel.appendLine(`Response: ${JSON.stringify(error.response.data)}`);
-            }
             throw error;
         }
     }
@@ -60,8 +49,6 @@ export class EmailService {
      */
     async fetchUnreadEmails(count: number = 50): Promise<EmailMessage[]> {
         try {
-            this.outputChannel.appendLine('Fetching unread emails...');
-            
             const token = this.authService.getAccessToken();
             if (!token) {
                 throw new Error('Not authenticated. Please sign in first.');
@@ -80,15 +67,9 @@ export class EmailService {
             });
 
             const emails: EmailMessage[] = response.data.value;
-            this.outputChannel.appendLine(`✅ Found ${emails.length} unread emails`);
-            
             return emails;
             
         } catch (error: any) {
-            this.outputChannel.appendLine(`❌ Error fetching unread emails: ${error.message}`);
-            if (error.response) {
-                this.outputChannel.appendLine(`Response: ${JSON.stringify(error.response.data)}`);
-            }
             throw error;
         }
     }
@@ -115,10 +96,8 @@ export class EmailService {
                 }
             );
 
-            this.outputChannel.appendLine(`✅ Fetched email details for: ${emailId}`);
             return response.data;
         } catch (error: any) {
-            this.outputChannel.appendLine(`❌ Error fetching email details: ${error.message}`);
             throw error;
         }
     }
@@ -143,10 +122,7 @@ export class EmailService {
                     }
                 }
             );
-
-            this.outputChannel.appendLine(`✅ Marked email as read: ${emailId}`);
         } catch (error: any) {
-            this.outputChannel.appendLine(`❌ Error marking email as read: ${error.message}`);
             throw error;
         }
     }

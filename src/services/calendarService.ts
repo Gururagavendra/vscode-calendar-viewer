@@ -2,18 +2,15 @@
  * Calendar Service - Handles Microsoft Graph API calls
  */
 
-import * as vscode from 'vscode';
 import axios from 'axios';
 import { CalendarEvent } from '../models/types';
 import { AuthService } from './authService';
 
 export class CalendarService {
-    private outputChannel: vscode.OutputChannel;
     private authService: AuthService;
     private readonly GRAPH_API_ENDPOINT = 'https://graph.microsoft.com/v1.0';
 
-    constructor(outputChannel: vscode.OutputChannel, authService: AuthService) {
-        this.outputChannel = outputChannel;
+    constructor(authService: AuthService) {
         this.authService = authService;
     }
 
@@ -22,8 +19,6 @@ export class CalendarService {
      */
     async fetchUpcomingEvents(days: number = 7): Promise<CalendarEvent[]> {
         try {
-            this.outputChannel.appendLine('Fetching calendar events...');
-            
             const token = this.authService.getAccessToken();
             if (!token) {
                 throw new Error('Not authenticated. Please sign in first.');
@@ -45,15 +40,9 @@ export class CalendarService {
             });
 
             const events: CalendarEvent[] = response.data.value;
-            this.outputChannel.appendLine(`✅ Found ${events.length} events`);
-            
             return events;
             
         } catch (error: any) {
-            this.outputChannel.appendLine(`❌ Error fetching events: ${error.message}`);
-            if (error.response) {
-                this.outputChannel.appendLine(`Response: ${JSON.stringify(error.response.data)}`);
-            }
             throw error;
         }
     }

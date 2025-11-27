@@ -12,7 +12,6 @@ import { EmailTreeProvider } from './ui/emailTreeView';
 import { EmailWebviewPanel } from './ui/emailWebview';
 import { EmailMessage } from './models/types';
 
-let outputChannel: vscode.OutputChannel;
 let authService: AuthService;
 let calendarService: CalendarService;
 let emailService: EmailService;
@@ -23,19 +22,10 @@ let emailTreeProvider: EmailTreeProvider;
  * Extension activation
  */
 export function activate(context: vscode.ExtensionContext) {
-    console.log('=== OUTLOOK CALENDAR EXTENSION ACTIVATING ===');
-    
-    outputChannel = vscode.window.createOutputChannel('Outlook Calendar');
-    outputChannel.appendLine('Outlook Calendar Viewer activated');
-    outputChannel.appendLine(`Extension path: ${context.extensionPath}`);
-    outputChannel.show();
-    
-    console.log('Output channel created');
-    
     // Initialize services
-    authService = new AuthService(outputChannel);
-    calendarService = new CalendarService(outputChannel, authService);
-    emailService = new EmailService(outputChannel, authService);
+    authService = new AuthService();
+    calendarService = new CalendarService(authService);
+    emailService = new EmailService(authService);
     
     // Initialize UI
     calendarTreeProvider = new CalendarTreeProvider();
@@ -65,14 +55,8 @@ export function activate(context: vscode.ExtensionContext) {
 function registerCommands(context: vscode.ExtensionContext) {
     // Command: Authenticate
     const authCommand = vscode.commands.registerCommand('outlook-calendar.authenticate', async () => {
-        outputChannel.show();
-        outputChannel.appendLine('\n=== Authentication Command Triggered ===');
-        
         try {
-            outputChannel.appendLine('Calling authService.authenticate()...');
             const success = await authService.authenticate();
-            
-            outputChannel.appendLine(`Authentication result: ${success}`);
             
             if (success) {
                 // Update context for view visibility
@@ -84,15 +68,11 @@ function registerCommands(context: vscode.ExtensionContext) {
                 await fetchAndDisplayEvents();
                 await fetchAndDisplayEmails();
             } else {
-                vscode.window.showErrorMessage('Authentication failed - no token received');
+                vscode.window.showErrorMessage('Authentication failed - please try again');
             }
         } catch (error: any) {
-            outputChannel.appendLine(`❌ Error caught: ${error.message}`);
-            outputChannel.appendLine(`Stack: ${error.stack}`);
-            
-            // Don't show error message if it's already been handled (like EADDRINUSE)
             if (error.code !== 'EADDRINUSE') {
-                vscode.window.showErrorMessage(`Authentication failed: ${error.message}`);
+                vscode.window.showErrorMessage('Authentication failed - please try again');
             }
         }
     });
@@ -214,5 +194,5 @@ async function fetchAndDisplayEmails(unreadOnly: boolean = false) {
  * Extension deactivation
  */
 export function deactivate() {
-    outputChannel.appendLine('Outlook Calendar Viewer deactivated');
+    // Cleanup if needed
 }

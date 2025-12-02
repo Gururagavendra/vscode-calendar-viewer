@@ -2,7 +2,7 @@
 
 Minimal VS Code extension to test Microsoft Graph API connectivity and polling for Outlook calendar events.
 
-## Goal
+## prerequistics
 
 Validate that we can:
 1. Authenticate with Microsoft Graph API
